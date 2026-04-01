@@ -19,24 +19,6 @@ import {
 /* ══════════════════════════════════════════════════════
    GLOBAL STYLES
 ══════════════════════════════════════════════════════ */
-const handleContact = (e) => {
-  if (e) e.preventDefault();
-
-  const email = "syedfarhantasnim000@gmail.com";
-  const subject = encodeURIComponent("Inquiry: Video Editing & Color Grading");
-  const body = encodeURIComponent("Hi Farhan,\n\nI saw your portfolio and would like to discuss a project with you.");
-
-  // Precise Detection
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-  if (isMobile) {
-    /* MOBILE PATH: Open Native App */
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-  } else {
-    /* DESKTOP PATH: Open New Tab Gmail Web */
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, "_blank");
-  }
-};
 function GlobalStyles() {
   useEffect(() => {
     if (!document.getElementById("ft-font")) {
@@ -212,44 +194,19 @@ function NightText({ lines = [], baseDelay = 0, lineDelay = 0.12, textStyle = {}
 ══════════════════════════════════════════════════════ */
 const SOCIALS = [
   {
-    label: "Instagram", 
-    href: "https://www.instagram.com/_farhantasnim/",
+    label: "Instagram", href: "https://www.instagram.com/_farhantasnim/",
     icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
   },
   {
-    label: "WhatsApp", 
-    href: "https://wa.me/8801722510256",
+    label: "WhatsApp", href: "https://wa.me/8801722510256",
     icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>,
   },
   {
-    label: "Email", 
-    href: "javascript:void(0)", 
+    label: "Email", href: "https://mail.google.com/mail/?view=cm&fs=1&to=syedfarhantasnim000@gmail.com",
     icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
   },
 ];
-/* ══════════════════════════════════════════════════════
-    SMART GMAIL REDIRECT — FOR MOBILE APP SUPPORT
-══════════════════════════════════════════════════════ */
-/* SMART EMAIL HANDLER */
-/* DEVICE DETECTION LOGIC */
-const handleEmailClick = (e) => {
-  if (e) e.preventDefault();
-  
-  const email = "syedfarhantasnim000@gmail.com";
-  const subject = encodeURIComponent("Inquiry: Video Editing & Color Grading");
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}`;
-  
-  // 1. DETECTION: Specifically checks if the user is on a phone
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  if (isMobile) {
-    // 2. MOBILE ACT: Change current location to Gmail (triggers the "Open in App" prompt)
-    window.location.href = gmailUrl;
-  } else {
-    // 3. PC ACT: Force a NEW TAB for Gmail Web
-    window.open(gmailUrl, "_blank", "noopener,noreferrer");
-  }
-};
 /* ══════════════════════════════════════════════════════
    HEADER  with CONTACT dropdown
 ══════════════════════════════════════════════════════ */
@@ -339,17 +296,7 @@ function Header() {
             >
               {SOCIALS.map(({ label, href, icon }) => (
                 <motion.a
-                  key={label}
-                  href={href}
-                  // This is the key: it only runs our "Brain" if the label is Email
-                  onClick={(e) => {
-                    if (label === "Email") {
-                      handleContact(e);
-                    }
-                  }}
-                  // Keep all your other props (whileHover, style, etc.) exactly as they are
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
                   whileHover={{ y: -4, color: "#fff", filter: "drop-shadow(0 0 10px rgba(255,255,255,0.7))" }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   style={{ color: "rgba(255,255,255,0.6)", cursor: "pointer", display: "flex", alignItems: "center" }}
@@ -367,18 +314,16 @@ function Header() {
 
 /* ══════════════════════════════════════════════════════
    VIDEO CAROUSEL
-   Glow colors measured directly from footage frames.
-   YouTube-style: live canvas sampling flows with playback.
 ══════════════════════════════════════════════════════ */
 const SLIDES = [
-  { video: "/videos/1.mp4", glow: "rgba(130,178,157,0.75)" }, // cool green-grey
-  { video: "/videos/2.mp4", glow: "rgba(77,131,180,0.75)"  }, // cold blue mountains
-  { video: "/videos/3.mp4", glow: "rgba(179,137,74,0.75)"  }, // warm amber/tungsten
-  { video: "/videos/4.mp4", glow: "rgba(179,111,32,0.75)"  }, // deep orange
-  { video: "/videos/5.mp4", glow: "rgba(180,175,110,0.75)" }, // warm olive/golden
-  { video: "/videos/6.mp4", glow: "rgba(180,172,93,0.75)"  }, // golden hour yellow
-  { video: "/videos/7.mp4", glow: "rgba(180,160,129,0.75)" }, // warm neutral/sunset
-  { video: "/videos/8.mp4", glow: "rgba(160,179,173,0.75)" }, // cool teal-grey
+  { video: "/videos/1.mp4" },
+  { video: "/videos/2.mp4" },
+  { video: "/videos/3.mp4" },
+  { video: "/videos/4.mp4" },
+  { video: "/videos/5.mp4" },
+  { video: "/videos/6.mp4" },
+  { video: "/videos/7.mp4" },
+  { video: "/videos/8.mp4" },
 ];
 
 const slideVariants = {
@@ -387,22 +332,17 @@ const slideVariants = {
   exit:   (d) => ({ x: d < 0 ? "100%" : "-100%", opacity: 0, transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] } }),
 };
 
-function Carousel({ onSlideChange, onVideoRef }) {
+function Carousel({ onSlideChange }) {
   const [cur, setCur] = useState(0);
   const [dir, setDir] = useState(1);
   const touchX   = useRef(0);
   const videoRef = useRef(null);
 
-  /* Expose video element to parent for canvas color sampling */
-  const setVideoRef = useCallback((el) => {
-    videoRef.current = el;
-    if (onVideoRef) onVideoRef(el);
-  }, [onVideoRef]);
-
   const go = useCallback((d) => {
     setDir(d);
     setCur((c) => {
       const next = (c + d + SLIDES.length) % SLIDES.length;
+      // Notify parent of new slide index — instant, no delay
       if (onSlideChange) onSlideChange(next);
       return next;
     });
@@ -536,10 +476,17 @@ function Carousel({ onSlideChange, onVideoRef }) {
    Mobile  : full-bleed → zooms out to 16:9 with ambient glow
 ══════════════════════════════════════════════════════ */
 
+/* Ambient glow colours matched to each slide */
+const GLOW_COLORS = [
+  "rgba(255,175,55,0.7)",  "rgba(55,95,255,0.7)",  "rgba(255,55,75,0.65)",
+  "rgba(55,215,155,0.65)", "rgba(195,55,255,0.7)",  "rgba(255,215,55,0.65)",
+  "rgba(55,175,255,0.7)",  "rgba(255,115,55,0.7)",
+];
 
 function HeroSection() {
   const { scrollY } = useScroll();
 
+  /* Desktop scroll transforms — only used on desktop */
   const titleOpacity = useTransform(scrollY, [0, 260], [1, 0]);
   const titleScale   = useTransform(scrollY, [0, 300], [1, 1.36]);
   const titleY       = useTransform(scrollY, [0, 300], ["0%", "-9%"]);
@@ -551,11 +498,8 @@ function HeroSection() {
 
   const [isMobile,  setIsMobile]  = useState(false);
   const [ready,     setReady]     = useState(false);
-  const [glowColor, setGlowColor] = useState(SLIDES[0].glow);
+  const [glowColor, setGlowColor] = useState(GLOW_COLORS[0]);
   const [scrolled,  setScrolled]  = useState(false);
-  const canvasRef   = useRef(null);
-  const rafRef      = useRef(null);
-  const videoElRef  = useRef(null); // shared ref to the actual <video> DOM node
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width:767px)");
@@ -570,77 +514,12 @@ function HeroSection() {
     return () => clearTimeout(t);
   }, []);
 
-  /* ── YouTube-style ambient: sample the live video frame every 200ms ──
-     Hidden 8×4 canvas reads from the <video> element, averages all pixels,
-     boosts saturation → smooth flowing color that matches current footage. */
-  useEffect(() => {
-    if (!isMobile) return; // desktop uses the same system but only on mobile glow
-
-    // Create hidden canvas for color sampling
-    const canvas = document.createElement("canvas");
-    canvas.width = 8; canvas.height = 4;
-    canvasRef.current = canvas;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-
-    let lastColor = SLIDES[0].glow;
-    let frameCount = 0;
-
-    const sample = () => {
-      const vid = videoElRef.current;
-      if (!vid || vid.readyState < 2 || vid.paused) {
-        rafRef.current = setTimeout(sample, 200);
-        return;
-      }
-
-      frameCount++;
-      // Sample every 200ms — smooth enough to flow with video
-      try {
-        ctx.drawImage(vid, 0, 0, 8, 4);
-        const pixels = ctx.getImageData(0, 0, 8, 4).data;
-
-        let r = 0, g = 0, b = 0, count = 0;
-        for (let i = 0; i < pixels.length; i += 4) {
-          r += pixels[i];
-          g += pixels[i + 1];
-          b += pixels[i + 2];
-          count++;
-        }
-        r = Math.round(r / count);
-        g = Math.round(g / count);
-        b = Math.round(b / count);
-
-        // Boost to make it vivid enough for ambient
-        const mx = Math.max(r, g, b, 1);
-        const scale = Math.min(200 / mx, 3.5);
-        const r2 = Math.min(255, Math.round(r * scale));
-        const g2 = Math.min(255, Math.round(g * scale));
-        const b2 = Math.min(255, Math.round(b * scale));
-
-        const newColor = `rgba(${r2},${g2},${b2},0.7)`;
-        if (newColor !== lastColor) {
-          lastColor = newColor;
-          setGlowColor(newColor);
-        }
-      } catch (e) {
-        // CORS or security error — fall back to slide's preset color
-      }
-
-      rafRef.current = setTimeout(sample, 200);
-    };
-
-    sample();
-    return () => clearTimeout(rafRef.current);
-  }, [isMobile]);
-
-  /* Callback for Carousel to register its video element */
+  /* Called by Carousel the moment a slide changes — max 50ms delay */
   const onSlideChange = useCallback((slideIndex) => {
-    // Instant preset color on slide change — canvas sampling refines it live
-    setGlowColor(SLIDES[slideIndex].glow);
-  }, []);
-
-  /* Register video element ref from Carousel */
-  const onVideoRef = useCallback((el) => {
-    videoElRef.current = el;
+    const t = setTimeout(() => {
+      setGlowColor(GLOW_COLORS[slideIndex % GLOW_COLORS.length]);
+    }, 50);
+    return () => clearTimeout(t);
   }, []);
 
   /* Mobile scroll detection — fires once, no per-frame updates */
@@ -709,7 +588,7 @@ function HeroSection() {
     return (
       <section style={{ position: "relative", height: "200vh" }}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", background: "#000" }}>
-          <div className="hero-vid"><Carousel onSlideChange={onSlideChange} onVideoRef={onVideoRef} /></div>
+          <div className="hero-vid"><Carousel onSlideChange={onSlideChange} /></div>
           {Title}
           {ScrollCue}
         </div>
@@ -775,7 +654,7 @@ function HeroSection() {
 
         {/* Video frame — CSS transition, no Framer Motion, no scroll listener */}
         <div className={`mob-vid-wrap${scrolled ? " scrolled" : ""}`}>
-          <Carousel onSlideChange={onSlideChange} onVideoRef={onVideoRef} />
+          <Carousel onSlideChange={onSlideChange} />
         </div>
 
         {/* Title — CSS fade, no JS */}
@@ -1288,9 +1167,7 @@ function Footer() {
         <div style={{ display: "flex", gap: "2.8rem", alignItems: "center" }}>
           {SOCIALS.map(({ label, href, icon }) => (
             <motion.a
-              key={label}
-              onClick={(e) => label === "Email" && handleEmailClick(e)} 
-              href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+              key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
               whileHover={{ y: -10, filter: "drop-shadow(0 0 18px rgba(255,255,255,0.85))", color: "#fff" }}
               transition={{ type: "spring", stiffness: 380, damping: 18 }}
               style={{ color: "rgba(255,255,255,0.42)", cursor: "pointer", display: "block" }}
